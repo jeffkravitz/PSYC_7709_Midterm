@@ -130,15 +130,16 @@ their act, and also reported on disgust and anger.
 
 Recent research has drawn a distinction between moral judgments directly
 focused on a transgressor's act and judgments focused on a
-transgressor's character. Functional-evolutionary theories of emotion
-posit that bad character should elicit disgust (a withdrawal emotion)
-because stable, negative traits are unlikely to change, so the best
-course of action may be to avoid those with bad character. By contrast,
-the transgressions themselves should elicit anger (an approach emotion),
-which may serve to change the transgressor's future behavior. The
-current study aimed to provide further evidence for these hypotheses by
-manipulating a transgressor's character and testing how this affects
-feelings of disgust and anger.
+transgressor's character (Uhlmann, Pizarro, \& Diermeier, 2015).
+Functional-evolutionary theories of emotion posit that bad character
+should elicit disgust (a withdrawal emotion) because stable, negative
+traits are unlikely to change, so the best course of action may be to
+avoid those with bad character. By contrast, the transgressions
+themselves should elicit anger (an approach emotion), which may serve to
+change the transgressor's future behavior (Giner-Sorolla \& Chapman,
+2017). The current study aimed to provide further evidence for these
+hypotheses by manipulating a transgressor's character and testing how
+this affects feelings of disgust and anger.
 
 \section{Methods}\label{methods}
 
@@ -177,13 +178,14 @@ Hypocrisy Judgments of the principal, and (6) Disgust-Scale Ratings.
 \begin{figure}
 \centering
 \includegraphics{APA_Report_files/figure-latex/unnamed-chunk-2-1.pdf}
-\caption{}
+\caption{\label{fig:unnamed-chunk-2}Severity of Act and Character judgments
+by factor of Domain.}
 \end{figure}
 
 \begin{table}[tbp]
 \begin{center}
 \begin{threeparttable}
-\caption{\label{tab:aovtable}ANOVA table for Hypothesis 1}
+\caption{\label{tab:unnamed-chunk-3}ANOVA table for Hypothesis 1}
 \begin{tabular}{lllllll}
 \toprule
 Effect & \multicolumn{1}{c}{$F$} & \multicolumn{1}{c}{$\mathit{df}_1$} & \multicolumn{1}{c}{$\mathit{df}_2$} & \multicolumn{1}{c}{$\mathit{MSE}$} & \multicolumn{1}{c}{$p$} & \multicolumn{1}{c}{$\hat{\eta}^2_G$}\\
@@ -199,8 +201,9 @@ Judgment type $\times$ Domain & 25.83 & 1 & 114 & 0.38 & < .001 & .054\\
 
 \begin{figure}
 \centering
-\includegraphics{APA_Report_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{}
+\includegraphics{APA_Report_files/figure-latex/unnamed-chunk-4-1.pdf}
+\caption{\label{fig:unnamed-chunk-4}Intensity of Anger and Disgust by factor
+of Domain.}
 \end{figure}
 
 \begin{table}[tbp]
@@ -259,27 +262,31 @@ predicted by both disgust, \(b = 0.31\), 95\% CI \([0.18\), \(0.43]\),
 \subsection{Simulation-Based Power
 Analysis}\label{simulation-based-power-analysis}
 
-We first estimate the overall mean judgment, and the standard deviation
-of these judgments from the data. The overall mean was 3.64, and the
-overall standard deviation was 0.93.
+In this section, I model the unll-hypothesis of the 2x2 ANOVA used to
+test the effect of Domain (control vs different) and Judgment Type (act
+vs.~character) on judgment severity. I do this by using a
+simulation-based power analysis by various effect sizes. I first
+estimate the overall mean judgment, and the standard deviation of these
+judgments from the data. The overall mean was 3.64, and the overall
+standard deviation was 0.93.
 
-To conduct the simulation we generate data for each subject using the
-rnorm function. Each subject made a judgment of the principal's act and
-character. There were 60 subjects in each Domain condition (control vs
-different). For each act and character judgment, we sample 1 score from
-each participant, producing 2 total scores from each participant. To
-model the effect of Domain condition, we systemically increase the mean
-of the Character judgments by a proportion of the standard deviation. We
-use effect-sizes of 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, and 1;
-which range from small to large. For each effect-size, we run 100
-simulated experiments, and save p-value for the main effect of
-congruency for each simulated experiment. Then, for each effect-size, we
+To conduct the simulation I generate data for each subject using the
+rnorm function. Each subject made a judgment of the principal's action
+and character. There were 60 subjects in each Domain condition (control
+vs different). For each act and character judgment, I sample 1 score
+from each participant, producing 2 total scores from each participant.
+To model the effect of Domain condition, I systemically increase the
+mean of the Character judgments by a proportion of the standard
+deviation. I use effect-sizes of 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+0.9, and 1; which range from small to large. For each effect-size, I run
+100 simulated experiments, and save p-value for the main effect of
+congruency for each simulated experiment. Then, for each effect-size, I
 find the proportion of experiments that resulted in p \textless{} 0.05.
 The proportion of experiments that reject the null is the power of the
 design to detect an effect of each size. The simulation below finds that
-this design had power of 0.84, to detect an effect of d = 0.4. It had
-power of 0.94 to detect effects of d = 0.8. The full power-curve for
-this design is displayed in Figure 3.
+this design had power of 0.90, to detect an effect of d = 0.4. It had
+power of 1.00 to detect effects of d = 0.8 and larger. The full
+power-curve for this design is displayed in Figure 3.
 
 \begin{figure}
 \centering
@@ -289,8 +296,15 @@ this design is displayed in Figure 3.
 
 \section{Discussion}\label{discussion}
 
-The hypotheses of the experiment were generally supported, and the
-analyses completed in SPSS were successfully recreated using R.
+The analyses completed in SPSS were successfully recreated using R. The
+hypotheses of the experiment were generally supported, but not entirely.
+The effect of Domain on Character and Act judgments did not parallel the
+effect of Domain on Disgust and Anger. However, in support of our
+hypotheses, only Disgust predicted Character Judgments, while both
+Disgust and Anger predicted Act judgments. One possibile limitation is
+that hypocrisy may not be an adequate method to manipulate bad moral
+character. It might also be the case that hypocrisy increases bad moral
+character but disproportionaly increases severity of a hypocratic act.
 
 \newpage
 
@@ -300,6 +314,15 @@ analyses completed in SPSS were successfully recreated using R.
 \setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
+\hypertarget{ref-giner2017beyond}{}
+Giner-Sorolla, R., \& Chapman, H. A. (2017). Beyond purity: Moral
+disgust toward bad character. \emph{Psychological Science},
+\emph{28}(1), 80--91.
+
+\hypertarget{ref-uhlmann2015person}{}
+Uhlmann, E. L., Pizarro, D. A., \& Diermeier, D. (2015). A
+person-centered approach to moral judgment. \emph{Perspectives on
+Psychological Science}, \emph{10}(1), 72--81.
 
 \endgroup
 

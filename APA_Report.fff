@@ -3,14 +3,16 @@
 
 \centering
 \includegraphics{APA_Report_files/figure-latex/unnamed-chunk-2-1.pdf}
-\caption{}
+\caption{\label{fig:unnamed-chunk-2}Severity of Act and Character judgments
+by factor of Domain.}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
 \centering
-\includegraphics{APA_Report_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{}
+\includegraphics{APA_Report_files/figure-latex/unnamed-chunk-4-1.pdf}
+\caption{\label{fig:unnamed-chunk-4}Intensity of Anger and Disgust by factor
+of Domain.}
 \end{figure*}
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}

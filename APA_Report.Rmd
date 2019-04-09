@@ -48,9 +48,13 @@ library("papaja")
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
- Recent research has drawn a distinction between moral judgments directly focused on a transgressor’s act and judgments focused on a transgressor’s character. Functional-evolutionary theories of emotion posit that bad character should elicit disgust (a withdrawal emotion) because stable, negative traits are unlikely to change, so the best course of action may be to avoid those with bad character. By contrast, the transgressions themselves should elicit anger (an approach emotion), which may serve to change the transgressor’s future behavior. The current study aimed to provide further evidence for these hypotheses by manipulating a transgressor’s character and testing how this affects feelings of disgust and anger.
+
+
+ Recent research has drawn a distinction between moral judgments directly focused on a transgressor’s act and judgments focused on a transgressor’s character [@uhlmann2015person]. Functional-evolutionary theories of emotion posit that bad character should elicit disgust (a withdrawal emotion) because stable, negative traits are unlikely to change, so the best course of action may be to avoid those with bad character. By contrast, the transgressions themselves should elicit anger (an approach emotion), which may serve to change the transgressor’s future behavior [@giner2017beyond]. The current study aimed to provide further evidence for these hypotheses by manipulating a transgressor’s character and testing how this affects feelings of disgust and anger.
+
 
 # Methods
+
 
   In order to test this hypothesis, 212 participants sampled from Amazon's Mechanical Turk completed an online survey programmed using Qualtrics software. All participants read a fabricated "news artcle" describing a high school principal who either sexually harassed a waitress or was pulled over by a cop for using cocaine (counterbalanced). To manipulate moral character of a transgessor, one independent variable of Domain (Different vs. Control vs. Same) was used. Participants in the "Different Domain" condition first read a fabricated "news article" that described the principal's benevolant actions in a domain other than that in which he transgressed (e.g., a principal who campaigned against drug use was caught harassing a woman, and vise versa). Participants in the "Same Domain" condition first read a fabricated "news article" that described the principal's benevolant actions in the same domain in which he transgressed (e.g., a principal who campaigned against drug use was pulled over for using cocaine, and vise versa). Participants in the "Control" condition did not read any article about the principal's benevolant actions. The principal who committed a transgression in a different domain should be rated as having better character than the principal who did not have any benevolant actions (control). The principal who committed a trangression in the same domain should have worse character than principal who did not have any benevolant actions (control) due to the added effect of hypocrisy. 
   
@@ -59,7 +63,8 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 
 # Results
 
-```{r}
+
+```{r, results="asis"}
 # Loading data into R
 
 library(readxl)
@@ -76,7 +81,7 @@ charExp1$Domain <- factor(charExp1$Domain, levels = unique(charExp1$Domain))
 ```
 
 
-```{r}
+```{r, results="asis", fig.cap="Severity of Act and Character judgments by factor of Domain."}
 # Hypothesis 1C: Domain should have a stronger effect on character evaluations than on act evaluations
 #Mixed ANOVA with factors of Domain (Control, Different) and Judgment Type (act vs. character)  
 
@@ -102,17 +107,6 @@ df.long_domain_judgment$judgment_type <- factor(df.long_domain_judgment$judgment
 df.long_domain_judgment$Domain <- factor(df.long_domain_judgment$Domain, 
                                          levels = unique(df.long_domain_judgment$Domain))
 
-library(ez)
-anov_domain_judgment <- ezANOVA(
-  data = df.long_domain_judgment,
-  dv = judgment,
-  wid = Response_ID,
-  within = judgment_type,
-  between = Domain,
-  type = 3,
-  return_aov = TRUE,
-  detailed = TRUE
-)
 
 kable_anov_domain_judgment <- df_control_diff %>%
   group_by(Domain) %>%
@@ -142,13 +136,14 @@ ggplot(df_anov_domain_judgment, aes(x=Domain, y=Judgment, fill=Judgment_Type))+
                     ymax = Judgment-Judgment_SE),
                 position = position_dodge(width=0.8),
                 width=0.1)+
-  labs(y="Judgment Severity")+
+  labs(y="Judgment Severity", title = "Judgment Severity by Domain and Judgment Type")+
   theme_classic(base_size = 12)
 
 anov_domain_judgment_2 <- aov(judgment ~ judgment_type * Domain + Error(Response_ID/judgment_type), data = df.long_domain_judgment)
 ```
 
-```{r aovtable, results="asis"}
+
+```{r, results="asis"}
 library(kableExtra)
 library(tidyr)
 
@@ -160,7 +155,8 @@ apa_table(
 )
 ```
 
-```{r}
+
+```{r, results="asis", fig.cap="Intensity of Anger and Disgust by factor of Domain."}
 # Hypothesis 2B: Domain should have a stronger effect on disgust than on anger  
 # Mixed ANOVA with factors of Domain and Emotion Type (disgust vs. anger)  
 library(tidyverse)
@@ -179,17 +175,6 @@ df.long_domain_emotion$emotion_type <- factor(df.long_domain_emotion$emotion_typ
 df.long_domain_emotion$Domain <- factor(df.long_domain_emotion$Domain, 
                                          levels = unique(df.long_domain_emotion$Domain))
 
-library(ez)
-anov_domain_emotion <- ezANOVA(
-  data = df.long_domain_emotion,
-  dv = emotion,
-  wid = Response_ID,
-  within = emotion_type,
-  between = Domain,
-  type = 3,
-  return_aov = TRUE,
-  detailed = TRUE
-)
 
 kable_anov_domain_emotion <- df_control_diff %>%
   group_by(Domain) %>%
@@ -217,7 +202,7 @@ ggplot(df_anov_domain_emotion, aes(x=Domain, y=Emotion, fill=Emotion_Type))+
                     ymax = Emotion-Emotion_SE),
                 position = position_dodge(width=0.8),
                 width=0.1)+
-  labs(y="Emotion Severity")+
+  labs(y="Emotion Severity", title = "Emotion Intensity by Domain and Emotion Type")+
   theme_classic(base_size = 12)
 
 anov_domain_emotion_2 <- aov(emotion ~ emotion_type * Domain + Error(Response_ID/emotion_type), data = df.long_domain_emotion)
@@ -236,7 +221,8 @@ apa_table(
 )
 ```
 
-```{r}
+
+```{r,results="asis"}
 # Hypothesis 3A: Disgust should predict character ratings better than anger ratings  
 # Whole sample multiple regression with disgust and anger ratings as simultaneous IVs and character as the DV. Then test for difference between two dependent betas  
 
@@ -247,7 +233,6 @@ library(tidyr)
 
 apa_emotion_char <- apa_print(lm_emotion_char)
 ```
-
 
 
 ```{r}
@@ -262,6 +247,7 @@ library(tidyr)
 apa_emotion_act <- apa_print(lm_emotion_act)
 ```
 
+
   A 2x2 ANOVA showed that there was a main effect of Domain (control vs different) on Judgment,  `r apa_anov_domain_judgment$full_result$Domain`. There was no main effect of Judgment Type (character vs. act) on Judgment, `r apa_anov_domain_judgment$full_result$judgment_type`. However, there was a significant interaction effect such that Character Judgments were more influenced by Domain than Act Judgments, `r apa_anov_domain_judgment$full_result$judgment_type_Domain`.
   
   A 2x2 ANOVA of Domain (control vs different) and Emotion Type (disgust vs. anger) showed that contrary to predictions, Domain did not have a stronger effect on disgust than on anger, `r apa_anov_domain_emotion$full_result$emotion_type_Domain`. This analysis also showed that anger was felt more strongly than disgust, `r apa_anov_domain_emotion$full_result$emotion_type`. There was no main effect of Domain, `r apa_anov_domain_emotion$full_result$Domain`.
@@ -270,21 +256,23 @@ apa_emotion_act <- apa_print(lm_emotion_act)
   
   A whole-sample multiple regression analysis with Act as the DV and Disgust and Anger as the predictors was used to analyze the hypothesis that both Disgust and Anger should predict character ratings. This analysis showed that, as expected, Act Ratings were significantly predicted by both disgust, `r apa_emotion_act$full_result$df_control_diff_Disgusted_Faces`, and anger, `r apa_emotion_act$full_result$df_control_diff_Angry_Faces`.
 
+
 ## Simulation-Based Power Analysis
-```{r}
+
+
+```{r, results="asis"}
 null_dist <- df.long_domain_judgment %>%
-  #group_by(Domain) %>%
   summarise(judgment_mean = mean(judgment),
             judgment_sd = sd(judgment)) 
 ```
 
-  We first estimate the overall mean judgment, and the standard deviation of these judgments from the data. The overall mean was `r null_dist$judgment_mean`, and the overall standard deviation was `r null_dist$judgment_sd`.
+
+  In this section, I model the unll-hypothesis of the 2x2 ANOVA used to test the effect of Domain (control vs different) and Judgment Type (act vs. character) on judgment severity. I do this by using a simulation-based power analysis by various effect sizes. I first estimate the overall mean judgment, and the standard deviation of these judgments from the data. The overall mean was `r null_dist$judgment_mean`, and the overall standard deviation was `r null_dist$judgment_sd`.
+
+  To conduct the simulation I generate data for each subject using the rnorm function. Each subject made a judgment of the principal's action and character. There were 60 subjects in each Domain condition (control vs different). For each act and character judgment, I sample 1 score from each participant, producing 2 total scores from each participant. To model the effect of Domain condition, I systemically increase the mean of the Character judgments by a proportion of the standard deviation. I use effect-sizes of 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, and 1; which range from small to large. For each effect-size, I run 100 simulated experiments, and save p-value for the main effect of congruency for each simulated experiment. Then, for each effect-size, I find the proportion of experiments that resulted in p < 0.05. The proportion of experiments that reject the null is the power of the design to detect an effect of each size. The simulation below finds that this design had power of 0.90, to detect an effect of d = 0.4. It had power of 1.00 to detect effects of d = 0.8 and larger. The full power-curve for this design is displayed in Figure 3.
 
 
-  To conduct the simulation we generate data for each subject using the rnorm function. Each subject made a judgment of the principal's act and character. There were 60 subjects in each Domain condition (control vs different). For each act and character judgment, we sample 1 score from each participant, producing 2 total scores from each participant. To model the effect of Domain condition, we systemically increase the mean of the Character judgments by a proportion of the standard deviation. We use effect-sizes of 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, and 1; which range from small to large. For each effect-size, we run 100 simulated experiments, and save p-value for the main effect of congruency for each simulated experiment. Then, for each effect-size, we find the proportion of experiments that resulted in p < 0.05. The proportion of experiments that reject the null is the power of the design to detect an effect of each size. The simulation below finds that this design had power of 0.84, to detect an effect of d = 0.4. It had power of 0.94 to detect effects of d = 0.8. The full power-curve for this design is displayed in Figure 3.
-
-
-```{r}
+```{r, results="asis"}
 null_mean <- null_dist$judgment_mean
 null_sd <- null_dist$judgment_sd
 effect_sizes <-c(seq(0,1,.1))
@@ -312,9 +300,8 @@ power_sim <- data.frame(save_es, save_p)
 plot_df <- power_sim %>%
   group_by(save_es)%>%
   summarise(power = length(save_p[save_p<.05])/length(save_p))
-
-power_analysis <- ecdf(power_sim$save_p)(effect_sizes)
 ```
+
 
 ```{r powerfig, fig.cap="Simulation-based power curve for this design"}
 ggplot(plot_df, aes(x=save_es, y=power))+
@@ -322,12 +309,14 @@ ggplot(plot_df, aes(x=save_es, y=power))+
   geom_point()+
   xlab("Effect-size")+
   ylab("Power")+
+  labs(title = "Simulation-Based Power Analysis by Effect Size")+
   theme_classic(base_size = 12)
 ```
   
+  
 # Discussion
 
-  The hypotheses of the experiment were generally supported, and the analyses completed in SPSS were successfully recreated using R.
+  The analyses completed in SPSS were successfully recreated using R. The hypotheses of the experiment were generally supported, but not entirely. The effect of Domain on Character and Act judgments did not parallel the effect of Domain on Disgust and Anger. However, in support of our hypotheses, only Disgust predicted Character Judgments, while both Disgust and Anger predicted Act judgments. One possibile limitation is that hypocrisy may not be an adequate method to manipulate bad moral character. It might also be the case that hypocrisy increases bad moral character but disproportionaly increases severity of a hypocratic action.
 
 \newpage
 
