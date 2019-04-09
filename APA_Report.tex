@@ -256,7 +256,41 @@ predicted by both disgust, \(b = 0.31\), 95\% CI \([0.18\), \(0.43]\),
 \(t(113) = 4.73\), \(p < .001\), and anger, \(b = 0.22\), 95\% CI
 \([0.08\), \(0.36]\), \(t(113) = 3.19\), \(p = .002\).
 
+\subsection{Simulation-Based Power
+Analysis}\label{simulation-based-power-analysis}
+
+We first estimate the overall mean judgment, and the standard deviation
+of these judgments from the data. The overall mean was 3.64, and the
+overall standard deviation was 0.93.
+
+To conduct the simulation we generate data for each subject using the
+rnorm function. Each subject made a judgment of the principal's act and
+character. There were 60 subjects in each Domain condition (control vs
+different). For each act and character judgment, we sample 1 score from
+each participant, producing 2 total scores from each participant. To
+model the effect of Domain condition, we systemically increase the mean
+of the Character judgments by a proportion of the standard deviation. We
+use effect-sizes of 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, and 1;
+which range from small to large. For each effect-size, we run 100
+simulated experiments, and save p-value for the main effect of
+congruency for each simulated experiment. Then, for each effect-size, we
+find the proportion of experiments that resulted in p \textless{} 0.05.
+The proportion of experiments that reject the null is the power of the
+design to detect an effect of each size. The simulation below finds that
+this design had power of 0.84, to detect an effect of d = 0.4. It had
+power of 0.94 to detect effects of d = 0.8. The full power-curve for
+this design is displayed in Figure 3.
+
+\begin{figure}
+\centering
+\includegraphics{APA_Report_files/figure-latex/powerfig-1.pdf}
+\caption{\label{fig:powerfig}Simulation-based power curve for this design}
+\end{figure}
+
 \section{Discussion}\label{discussion}
+
+The hypotheses of the experiment were generally supported, and the
+analyses completed in SPSS were successfully recreated using R.
 
 \newpage
 

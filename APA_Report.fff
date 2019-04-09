@@ -12,3 +12,10 @@
 \includegraphics{APA_Report_files/figure-latex/unnamed-chunk-3-1.pdf}
 \caption{}
 \end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\centering
+\includegraphics{APA_Report_files/figure-latex/powerfig-1.pdf}
+\caption{\label{fig:powerfig}Simulation-based power curve for this design}
+\end{figure*}
