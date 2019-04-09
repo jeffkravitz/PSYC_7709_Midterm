@@ -1,0 +1,289 @@
+---
+title             : "The Distinct Social Function of Disgust and Anger in the Moral Domain"
+shorttitle        : "SOCIAL FUNCTION OF DISGUST AND ANGER"
+
+author: 
+  - name          : "Jeffrey Kravitz"
+    affiliation   : " "
+    corresponding : yes    
+    address       : "N/A"
+    email         : "jkravitz.edu@gmail.com"
+
+affiliation:
+  - id            : " "
+    institution   : "CUNY Brooklyn College"
+
+authornote: |
+
+
+abstract: |
+ Recent research has drawn a distinction between moral judgments directly focused on a transgressor’s act and judgments focused on a transgressor’s character. Functional-evolutionary theories of emotion posit that bad character should elicit disgust (a withdrawal emotion) because stable, negative traits are unlikely to change, so the best course of action may be to avoid those with bad character. By contrast, the transgressions themselves should elicit anger (an approach emotion), which may serve to change the transgressor’s future behavior. The current study aimed to provide further evidence for these hypotheses by manipulating a transgressor’s character and testing how this affects feelings of disgust and anger. To manipulate character, we provided information about the transgressor’ prior good deeds, compared to a control condition in which no positive information was provided. Participants rated the transgressor’s character and the wrongness of their act, and also reported on disgust and anger. 
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "morality, character, anger, disgust"
+wordcount         : " "
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+ Recent research has drawn a distinction between moral judgments directly focused on a transgressor’s act and judgments focused on a transgressor’s character. Functional-evolutionary theories of emotion posit that bad character should elicit disgust (a withdrawal emotion) because stable, negative traits are unlikely to change, so the best course of action may be to avoid those with bad character. By contrast, the transgressions themselves should elicit anger (an approach emotion), which may serve to change the transgressor’s future behavior. The current study aimed to provide further evidence for these hypotheses by manipulating a transgressor’s character and testing how this affects feelings of disgust and anger.
+
+# Methods
+
+  In order to test this hypothesis, 212 participants sampled from Amazon's Mechanical Turk completed an online survey programmed using Qualtrics software. All participants read a fabricated "news artcle" describing a high school principal who either sexually harassed a waitress or was pulled over by a cop for using cocaine (counterbalanced). To manipulate moral character of a transgessor, one independent variable of Domain (Different vs. Control vs. Same) was used. Participants in the "Different Domain" condition first read a fabricated "news article" that described the principal's benevolant actions in a domain other than that in which he transgressed (e.g., a principal who campaigned against drug use was caught harassing a woman, and vise versa). Participants in the "Same Domain" condition first read a fabricated "news article" that described the principal's benevolant actions in the same domain in which he transgressed (e.g., a principal who campaigned against drug use was pulled over for using cocaine, and vise versa). Participants in the "Control" condition did not read any article about the principal's benevolant actions. The principal who committed a transgression in a different domain should be rated as having better character than the principal who did not have any benevolant actions (control). The principal who committed a trangression in the same domain should have worse character than principal who did not have any benevolant actions (control) due to the added effect of hypocrisy. 
+  
+  Participants completed measures on 6 dependent variables: (1) Act Judgments of the principal, (2) Character Judgments of the principal, (3) Emotion towards the principal in endorsements of words, (4) Emotion towards the principal in endorsement of photographed faces, (5) Hypocrisy Judgments of the principal, and (6) Disgust-Scale Ratings.
+
+
+# Results
+
+```{r}
+# Loading data into R
+
+library(readxl)
+Final_CharExp1_Data <- read_excel("Final_CharExp1_Data.xls")
+
+library(dplyr)
+charExp1 <- Final_CharExp1_Data %>%
+  filter(Final_CharExp1_Data$Finished==1,
+         Final_CharExp1_Data$Attention_Check==1,
+         Final_CharExp1_Data$DSR_Attention_Check==1,
+         Final_CharExp1_Data$Half_Median_Time==1)
+
+charExp1$Domain <- factor(charExp1$Domain, levels = unique(charExp1$Domain))
+```
+
+
+```{r}
+# Hypothesis 1C: Domain should have a stronger effect on character evaluations than on act evaluations
+#Mixed ANOVA with factors of Domain (Control, Different) and Judgment Type (act vs. character)  
+
+library(dplyr)
+df_control_diff <- charExp1 %>%
+  filter(charExp1$Domain != "Same")
+
+df_control_diff <- as.data.frame(df_control_diff)
+
+library(tidyverse)
+df_control_diff %>%
+  tidyr::gather(
+    key="judgment_type",
+    value="judgment",
+    Character_Judgments,
+    Act_Judgments
+  ) -> 
+  df.long_domain_judgment
+
+df.long_domain_judgment$Response_ID <- factor(df.long_domain_judgment$Response_ID)
+df.long_domain_judgment$judgment_type <- factor(df.long_domain_judgment$judgment_type,
+                                                levels =  unique(df.long_domain_judgment$judgment_type))
+df.long_domain_judgment$Domain <- factor(df.long_domain_judgment$Domain, 
+                                         levels = unique(df.long_domain_judgment$Domain))
+
+library(ez)
+anov_domain_judgment <- ezANOVA(
+  data = df.long_domain_judgment,
+  dv = judgment,
+  wid = Response_ID,
+  within = judgment_type,
+  between = Domain,
+  type = 3,
+  return_aov = TRUE,
+  detailed = TRUE
+)
+
+kable_anov_domain_judgment <- df_control_diff %>%
+  group_by(Domain) %>%
+  dplyr::summarise(character_judgment_mean = round(mean(Character_Judgments),digits = 2),
+                   character_SE = round((sd(Character_Judgments)/sqrt(length(Character_Judgments))),digits = 2),
+                   act_judgment_mean = round(mean(Act_Judgments),digits = 2),
+                   act_SE = round((sd(Act_Judgments)/sqrt(length(Act_Judgments))),digits = 2))
+
+
+df_anov_domain_judgment <- data.frame(Domain = rep(c("Control","Different"),each=2),
+                                      Judgment_Type = factor(rep(c("Character","Act"),times=2)),
+                                      Judgment = c(kable_anov_domain_judgment[[2]][1],
+                                                   kable_anov_domain_judgment[[4]][1],
+                                                   kable_anov_domain_judgment[[2]][2],
+                                                   kable_anov_domain_judgment[[4]][2]),
+                                      Judgment_SE = c(kable_anov_domain_judgment[[3]][1],
+                                                      kable_anov_domain_judgment[[5]][1],
+                                                      kable_anov_domain_judgment[[3]][2],
+                                                      kable_anov_domain_judgment[[5]][2]))
+
+
+library(ggplot2)
+ggplot(df_anov_domain_judgment, aes(x=Domain, y=Judgment, fill=Judgment_Type))+
+  geom_bar(stat="identity", position = position_dodge(width=0.8), width = 0.7)+
+  coord_cartesian(ylim = c(2.9,4.3))+
+  geom_errorbar(aes(ymin = Judgment+Judgment_SE,
+                    ymax = Judgment-Judgment_SE),
+                position = position_dodge(width=0.8),
+                width=0.1)+
+  labs(y="Judgment Severity")+
+  theme_classic(base_size = 12)
+
+anov_domain_judgment_2 <- aov(judgment ~ judgment_type * Domain + Error(Response_ID/judgment_type), data = df.long_domain_judgment)
+```
+
+```{r aovtable, results="asis"}
+library(kableExtra)
+library(tidyr)
+
+apa_anov_domain_judgment <- apa_print(anov_domain_judgment_2)
+
+apa_table(
+  apa_anov_domain_judgment$table,
+  caption = "ANOVA table for Hypothesis 1"
+)
+```
+
+```{r}
+# Hypothesis 2B: Domain should have a stronger effect on disgust than on anger  
+# Mixed ANOVA with factors of Domain and Emotion Type (disgust vs. anger)  
+library(tidyverse)
+df_control_diff %>%
+  tidyr::gather(
+    key="emotion_type",
+    value="emotion",
+    Angry_Faces,
+    Disgusted_Faces
+  ) -> 
+  df.long_domain_emotion
+
+df.long_domain_emotion$Response_ID <- factor(df.long_domain_emotion$Response_ID)
+df.long_domain_emotion$emotion_type <- factor(df.long_domain_emotion$emotion_type,
+                                                levels =  unique(df.long_domain_emotion$emotion_type))
+df.long_domain_emotion$Domain <- factor(df.long_domain_emotion$Domain, 
+                                         levels = unique(df.long_domain_emotion$Domain))
+
+library(ez)
+anov_domain_emotion <- ezANOVA(
+  data = df.long_domain_emotion,
+  dv = emotion,
+  wid = Response_ID,
+  within = emotion_type,
+  between = Domain,
+  type = 3,
+  return_aov = TRUE,
+  detailed = TRUE
+)
+
+kable_anov_domain_emotion <- df_control_diff %>%
+  group_by(Domain) %>%
+  dplyr::summarise(disgust_mean = round(mean(Disgusted_Faces),digits = 2),
+                   disgust_SE = round((sd(Disgusted_Faces)/sqrt(length(Disgusted_Faces))),digits = 2),
+                   anger_mean = round(mean(Angry_Faces),digits = 2),
+                   anger_SE = round((sd(Angry_Faces)/sqrt(length(Angry_Faces))),digits = 2))
+
+df_anov_domain_emotion <- data.frame(Domain = rep(c("Control","Different"),each=2),
+                                      Emotion_Type = factor(rep(c("Disgust","Anger"),times=2)),
+                                      Emotion = c(kable_anov_domain_emotion[[2]][1],
+                                                   kable_anov_domain_emotion[[4]][1],
+                                                   kable_anov_domain_emotion[[2]][2],
+                                                   kable_anov_domain_emotion[[4]][2]),
+                                      Emotion_SE = c(kable_anov_domain_emotion[[3]][1],
+                                                      kable_anov_domain_emotion[[5]][1],
+                                                      kable_anov_domain_emotion[[3]][2],
+                                                      kable_anov_domain_emotion[[5]][2]))
+
+library(ggplot2)
+ggplot(df_anov_domain_emotion, aes(x=Domain, y=Emotion, fill=Emotion_Type))+
+  geom_bar(stat="identity", position = position_dodge(width=0.8), width = 0.7)+
+  coord_cartesian(ylim = c(2.2,3.2))+
+  geom_errorbar(aes(ymin = Emotion+Emotion_SE,
+                    ymax = Emotion-Emotion_SE),
+                position = position_dodge(width=0.8),
+                width=0.1)+
+  labs(y="Emotion Severity")+
+  theme_classic(base_size = 12)
+
+anov_domain_emotion_2 <- aov(emotion ~ emotion_type * Domain + Error(Response_ID/emotion_type), data = df.long_domain_emotion)
+```
+
+
+```{r anothatable, results="asis"}
+library(kableExtra)
+library(tidyr)
+
+apa_anov_domain_emotion <- apa_print(anov_domain_emotion_2)
+
+apa_table(
+  apa_anov_domain_emotion$table,
+  caption = "ANOVA table for Hypothesis 2"
+)
+```
+
+```{r}
+# Hypothesis 3A: Disgust should predict character ratings better than anger ratings  
+# Whole sample multiple regression with disgust and anger ratings as simultaneous IVs and character as the DV. Then test for difference between two dependent betas  
+
+lm_emotion_char <- summary(lm(df_control_diff$Character_Judgments ~ df_control_diff$Angry_Faces + df_control_diff$Disgusted_Faces, data = df_control_diff))
+
+library(kableExtra)
+library(tidyr)
+
+apa_emotion_char <- apa_print(lm_emotion_char)
+```
+
+
+
+```{r}
+# Hypothesis 3B: Both disgust and anger should predict act judgments  
+# Whole sample multiple regression with disgust and anger ratings as simultaneous IVs and act judgments as the DV. Then test for difference between two dependent betas  
+
+lm_emotion_act <- summary(lm(df_control_diff$Act_Judgments ~ df_control_diff$Angry_Faces + df_control_diff$Disgusted_Faces, data = df_control_diff))
+
+library(kableExtra)
+library(tidyr)
+
+apa_emotion_act <- apa_print(lm_emotion_act)
+```
+
+  A 2x2 ANOVA showed that there was a main effect of Domain (control vs different) on Judgment,  `r apa_anov_domain_judgment$full_result$Domain`. There was no main effect of Judgment Type (character vs. act) on Judgment, `r apa_anov_domain_judgment$full_result$judgment_type`. However, there was a significant interaction effect such that Character Judgments were more influenced by Domain than Act Judgments, `r apa_anov_domain_judgment$full_result$judgment_type_Domain`.
+  
+  A 2x2 ANOVA of Domain (control vs different) and Emotion Type (disgust vs. anger) showed that contrary to predictions, Domain did not have a stronger effect on disgust than on anger, `r apa_anov_domain_emotion$full_result$emotion_type_Domain`. This analysis also showed that anger was felt more strongly than disgust, `r apa_anov_domain_emotion$full_result$emotion_type`. There was no main effect of Domain, `r apa_anov_domain_emotion$full_result$Domain`.
+  
+  A whole-sample multiple regression analysis with Character as the DV and Disgust and Anger as the predictors was used to analyze the hypothesis that Disgust should predict character ratings better than anger ratings. This analysis showed that Disgust significantly predicted Character ratings, `r apa_emotion_char$full_result$df_control_diff_Disgusted_Faces`, but anger did not,  `r apa_emotion_char$full_result$df_control_diff_Angry_Faces`.
+  
+  A whole-sample multiple regression analysis with Act as the DV and Disgust and Anger as the predictors was used to analyze the hypothesis that both Disgust and Anger should predict character ratings. This analysis showed that, as expected, Act Ratings were significantly predicted by both disgust, `r apa_emotion_act$full_result$df_control_diff_Disgusted_Faces`, and anger, `r apa_emotion_act$full_result$df_control_diff_Angry_Faces`.
+
+  
+# Discussion
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup

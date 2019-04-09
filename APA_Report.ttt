@@ -1,0 +1,36 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:aovtable}ANOVA table for Hypothesis 1}
+\begin{tabular}{lllllll}
+\toprule
+Effect & \multicolumn{1}{c}{$F$} & \multicolumn{1}{c}{$\mathit{df}_1$} & \multicolumn{1}{c}{$\mathit{df}_2$} & \multicolumn{1}{c}{$\mathit{MSE}$} & \multicolumn{1}{c}{$p$} & \multicolumn{1}{c}{$\hat{\eta}^2_G$}\\
+\midrule
+Domain & 17.37 & 1 & 114 & 1.11 & < .001 & .102\\
+Judgment type & 1.05 & 1 & 114 & 0.38 & .308 & .002\\
+Judgment type $\times$ Domain & 25.83 & 1 & 114 & 0.38 & < .001 & .054\\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{center}
+\end{table*}
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[tbp]
+\begin{center}
+\begin{threeparttable}
+\caption{\label{tab:anothatable}ANOVA table for Hypothesis 2}
+\begin{tabular}{lllllll}
+\toprule
+Effect & \multicolumn{1}{c}{$F$} & \multicolumn{1}{c}{$\mathit{df}_1$} & \multicolumn{1}{c}{$\mathit{df}_2$} & \multicolumn{1}{c}{$\mathit{MSE}$} & \multicolumn{1}{c}{$p$} & \multicolumn{1}{c}{$\hat{\eta}^2_G$}\\
+\midrule
+Domain & 2.08 & 1 & 114 & 2.12 & .152 & .014\\
+Emotion type & 7.54 & 1 & 114 & 0.59 & .007 & .014\\
+Emotion type $\times$ Domain & 1.44 & 1 & 114 & 0.59 & .232 & .003\\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{center}
+\end{table*}
